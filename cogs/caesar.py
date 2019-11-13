@@ -14,7 +14,7 @@ class Caesar(commands.Cog):
     async def caesar(self,ctx):
         plaintext = quote.getQuote()
         ciphertext = ""
-        shift = random.randint(0,25)
+        shift = random.randint(1,25)
 
         for l in list(plaintext):
             if ('a' <= l <= 'z'):
