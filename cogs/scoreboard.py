@@ -9,15 +9,20 @@ class Scoreboard(commands.Cog):
     
     @commands.command()
     async def scoreboard(self,ctx):
-        leaderboard = f'```'
-        scores = db.readallscores()
-        scores.sort(key = itemgetter(1), reverse = True)
-        scores = scores[:5]
-        for index, score in scores:
-            leaderboard += f'\n{index + 1}. {ctx.bot.get_user(scores[index][0]).name}'
-        
-        leaderboard += f'```'
-        await ctx.send(leaderboard)
+        leaderboard = '```'
+        scores = sorted(db.readallscores(), key = itemgetter(1), reverse = True)[:5]
+        server = ctx.message.guild
+
+        if(len(scores) > 0):
+                for index, score in enumerate(scores):
+                    try:
+                        leaderboard += f'\n{index + 1}. {server.get_member(int(scores[index][0])).display_name}'
+                    except AttributeError:
+                        pass
+                leaderboard += '\n```'
+                await ctx.send(leaderboard)
+        else:
+            await ctx.send("It doesn't look like anyone has played yet")
 
 def setup(bot):
     bot.add_cog(Scoreboard(bot))
